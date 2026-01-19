@@ -24,6 +24,8 @@ Here is an Example you use the scanner in your application. (You can also find i
 
 
 ```java
+package example;
+
 import java.util.Scanner;
 import badWordScanner.BadWordScanner;
 import badWordScanner.Response;
@@ -32,7 +34,7 @@ import badWordScanner.Sensitivity;
 public class Main {
     static String input = "";
 
-    public static void main() {
+    public static void main(String[] args) {
         System.out.println("Scanner Bereit");
         Scanner scanner = new Scanner(System.in);
 
@@ -47,12 +49,12 @@ public class Main {
             if (input.equals("exit")) break;
 
             //Gives you a Response Objekt
-            Response output = badWordScanner.Check(input);
+            Response output = badWordScanner.check(input);
 
-            if (output.isSafe) {
+            if (output.isSafe()) {
                 System.out.println("-Text ist gut-");
-            } else if (!output.isSafe) {
-                System.out.println(output.message);
+            } else if (!output.isSafe()) {
+                System.out.println(output.getMessage());
             }
         }
         scanner.close();
