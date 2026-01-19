@@ -1,7 +1,6 @@
 package badWordScanner;
 
 import badWordScanner.helper.HttpHelper;
-
 import java.net.http.HttpResponse;
 import java.util.*;
 
