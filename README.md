@@ -10,6 +10,8 @@ A lightweight Java library that validates **German or Englisch text** using an e
 * **Structured Result:** Returns a simple object containing a status (`isSafe`) and a specific reason.
 * **BYO-API:** Designed to work with your own API Key (Privacy & Control).
 * **Native Java:** Easy to drop into any Java project.
+* **Smart Caching System:** Integrated, memory-efficient cache that responds to repeated requests immediately without calling the AI. This saves API costs and reduces latency.
+* **Intelligentes Ressourcen-Management:** Only stores relevant short texts (less than 50 characters) and automatically deletes the longest unused entries (LRU) to keep RAM            consumption to a minimum.
 
 ## Installation
 
