@@ -1,7 +1,7 @@
 package badWordScanner;
 
 public enum Sensitivity {
-    NOFILTER("","", new String[][] {{""}}),
+    NOFILTER("","", new String[][] {{""}}, new String[][] {{""}}), //Skips AI Completely
 
     ZERO_TOLERANCE(
             "1. Anything that insults individuals or groups" +
@@ -35,7 +35,31 @@ public enum Sensitivity {
                             "RGFzIGlzdCBTLmMuaC5lLmkuw58uZQ==",
                             "W3RydWVdIFZlcnN0ZWNrdGVzIFNjaGltcGZ3b3J0IGVya2FubnQ="
                     }
+            },
+
+            new String[][] {
+                    {
+                            "RGFtbiwgSSdtIGxhdGUgZm9yIHdvcmsu",
+                            "W3RydWVdIFVzZSBvZiBzd2VhciB3b3Jkcw=="
+                    },
+                    {
+                            "SGVsbG8sIEkgd291bGQgbGlrZSBzb21lIGluZm9ybWF0aW9uLg==",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "VGhhdCBsb29rcyByZWFsbHkgc2hpdHR5Lg==",
+                            "W3RydWVdIFZ1bGdhciBleHByZXNzaW9u"
+                    },
+                    {
+                            "WW91IGFyZSBzdHVwaWQu",
+                            "W3RydWVdIEluc3VsdGluZyBsYW5ndWFnZQ=="
+                    },
+                    {
+                            "VGhpcyBpcyBzLmguaS50Lg==",
+                            "W3RydWVdIEhpZGRlbiBzd2VhciB3b3JkIGRldGVjdGVk"
+                    }
             }
+
     ),
 
     PROFESSIONAL(
@@ -69,6 +93,30 @@ public enum Sensitivity {
                     {
                             "RHUgaGFzdCBqYSBrZWluZSBBaG51bmcsIGR1IEFuZsOkbmdlci4=",
                             "W3RydWVdIEJlbGVpZGlndW5nIGdlZ2VuIGVpbmUgUGVyc29u"
+                    }
+            },
+
+
+            new String[][] {
+                    {
+                            "U2h1dCB1cCBhbmQgbGlzdGVuLg==",
+                            "W3RydWVdIEFnZ3Jlc3NpdmUgY29tbWFuZA=="
+                    },
+                    {
+                            "U3VjaCBjcmFwLCB0aGUgcmVjaXBlIGRpZG4ndCB3b3JrLg==",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "V2hhdCBraW5kIG9mIHNoaXQgaXMgdGhpcz8=",
+                            "W3RydWVdIFZ1bGdhciBleHByZXNzaW9u"
+                    },
+                    {
+                            "WW91IEkuZC5pLm8udA==",
+                            "W3RydWVdIEluc3VsdCBhZ2FpbnN0IGEgcGVyc29uIChPYmZ1c2NhdGVkKQ=="
+                    },
+                    {
+                            "WW91IGhhdmUgbm8gaWRlYSwgeW91IHJvb2tpZS4=",
+                            "W3RydWVdIEluc3VsdCBhZ2FpbnN0IGEgcGVyc29u"
                     }
             }
     ),
@@ -105,6 +153,31 @@ public enum Sensitivity {
                     {
                         "QmlzdCBkdSBlaWdlbnRsaWNoIGJlaGluZGVydD8gTMO2c2NoIGRpY2gu",
                         "W3RydWVdIERpc2tyaW1pbmllcmVuZGUgQmVsZWlkaWd1bmcgYmV6w7xnbGljaCBCZWhpbmRlcnVuZw=="
+                    }
+            },
+
+
+
+            new String[][] {
+                    {
+                            "VGhhdCdzIHRvdGFsIG5vbnNlbnNlIHdoYXQgeW91J3JlIHNheWluZy4=",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "WW91IHNvbiBvZiBhIGJpdGNoLCBmdWNrIHlvdXIgbW90aGVyLg==",
+                            "W3RydWVdIFNldmVyZSB2dWxnYXIgaW5zdWx0IGFnYWluc3QgZmFtaWx5"
+                    },
+                    {
+                            "U2hpdCwgSSBmb3Jnb3QgbXkgd2FsbGV0IQ==",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "WW91IEEucy5zLmhuby5sLmU=",
+                            "W3RydWVdIERpcmVjdCBpbnN1bHQgKE9iZnVzY2F0ZWQp"
+                    },
+                    {
+                            "QXJlIHlvdSByZXRhcmRlZD8gRGVsZXRlIHlvdXJzZWxmLg==",
+                            "W3RydWVdIERpc2NyaW1pbmF0b3J5IGluc3VsdCByZWdhcmRpbmcgZGlzYWJpbGl0eQ=="
                     }
             }
     ),
@@ -146,29 +219,64 @@ public enum Sensitivity {
                         "UGFzcyBhdWYgd2FzIGR1IHNhZ3N0LCBzb25zdCBrcmllZ3N0IGR1IMOEcmdlci4=",
                         "W2ZhbHNlXQ=="
                     }
+            },
+
+
+
+            new String[][] {
+                    {
+                            "WW91IGFyZSBzdWNoIGFuIGlkaW90LCBjYW4ndCB5b3UgZG8gYW55dGhpbmc/",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "SSB3aWxsIGZpbmQgeW91IGFuZCBraWxsIHlvdXIgZmFtaWx5Lg==",
+                            "W3RydWVdIEV4dHJlbWUgQW5kcm9odW5nIHZvbiBwaHlzaXNjaGVyIEdld2FsdA=="
+                    },
+                    {
+                            "RnVja2luZyBoZWxsLCBteSBjYXIgYnJva2UgZG93bi4=",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "WW91IGZ1Y2tpbmcgTi5pLmcuZy5lLnI=",
+                            "W3RydWVdIFNldmVyZSByYWNpc3QgaW5zdWx0IChPYmZ1c2NhdGVkKQ=="
+                    },
+                    {
+                            "WW91IEEgcyBz",
+                            "W2ZhbHNlXQ=="
+                    },
+                    {
+                            "V2F0Y2ggd2hhdCB5b3Ugc2F5LCBvciB5b3UnbGwgYmUgaW4gdHJvdWJsZS4=",
+                            "W2ZhbHNlXQ=="
+                    }
             }
     );
 
     private final String conditions;
     private final String exceptions;
-    private final String[][] example;
 
-    Sensitivity(String bedingung, String ausnahme, String[][] beispiele) {
+    //All examples are encoded in Base64, so nothing can detect them because they contain slurs
+    private final String[][] exampleDE;
+    private final String[][] exampleEN;
+
+
+    Sensitivity(String bedingung, String ausnahme, String[][] exampleDE,  String[][] exampleEN) {
         this.conditions = bedingung;
         this.exceptions = ausnahme;
-        this.example = beispiele;
+        this.exampleDE = exampleDE;
+        this.exampleEN = exampleEN;
     }
 
     public String getConditions() {
         return conditions;
     }
-
     public String getExceptions() {
         return exceptions;
     }
-
-    public String[][] getExample() {
-        return example;
+    public String[][] getExampleDE() {
+        return exampleDE;
+    }
+    public String[][] getExampleEN() {
+        return exampleEN;
     }
 }
 

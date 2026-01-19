@@ -9,7 +9,7 @@ public class JsonHelper {
 
     public static String extractTextFromJSON(String jsonResponse) {
         if (jsonResponse == null || jsonResponse.isEmpty()) {
-            return "[error] Leere Antwort erhalten";
+            return "[error] Received empty reply";
         }
 
         Matcher matcher = CONTENT_PATTERN.matcher(jsonResponse);
@@ -23,7 +23,7 @@ public class JsonHelper {
             return cleanUpAnswer(foundContent);
         }
 
-        return "[error] Konnte Antwort nicht verstehen, DEBUG - Konnte JSON nicht lesen: " + jsonResponse;
+        return "[error] Could not understand response, DEBUG - Could not read JSON: " + jsonResponse;
     }
 
     private static String cleanUpAnswer(String jsonResponse) {
@@ -39,10 +39,11 @@ public class JsonHelper {
                 .replace("\\u00df", "ß");
     }
 
+
     public static String makeSafeForJson(String text) {
         return text.replace("\\", "\\\\")
                 .replace("\"", "\\\"")
-                .replace("\n", "  ")
+                .replace("\n", "\\n")
                 .replace("\r", "")
                 .replace("\t", "\\t");
     }

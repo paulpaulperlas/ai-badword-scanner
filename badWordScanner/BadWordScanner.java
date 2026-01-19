@@ -7,7 +7,8 @@ import java.net.http.HttpResponse;
 import static badWordScanner.helper.JsonHelper.*;
 
 public class BadWordScanner {
-    private Sensitivity sensitivity;
+    private Sensitivity sensitivity; //There are a few Sensitivity: ZERO_TOLERANCE, PROFESSIONAL, STANDARD and MINIMAL
+    private Language language; //There are German (DE) and Englisch (EN)
     private String apiUrl;
     private String aiModel;
 
@@ -17,27 +18,28 @@ public class BadWordScanner {
     private String user = "BadWordScanner";
 
 
-    public BadWordScanner(Sensitivity sensitivity, String api_url, String ai_model) {
+    public BadWordScanner(Sensitivity sensitivity, Language language, String api_url, String ai_model) {
         this.sensitivity = sensitivity;
+        this.language = language;
         this.apiUrl = api_url;
         this.aiModel = ai_model;
     }
 
     public Response check(String text) {
-        if (sensitivity == Sensitivity.NOFILTER) {
+        if (sensitivity == Sensitivity.NOFILTER) { //NOFILTER skips AI
             return new Response(true, "");
         } else {
-            String response = checkmessage(text);
+            String response = checkMessage(text);
             return createChecked(response);
         }
     }
 
 
-    public String checkmessage(String text) {
+    public String checkMessage(String text) {
         try {
             String safeMessage = makeSafeForJson(text);
 
-            String systemprompt = "You are a moderator. Check the following German text. " +
+            String systemprompt = "You are a moderator. Check the following " + language.getString() + " text. " +
                     "**Rules: **" +
                     "1. If the text does NOT meet the conditions: Respond ONLY with: [false] " +
                     "2. If the text meets the conditions (including hidden ones such as Leetspeak, e.g., ‘3’ instead of ‘e’): Respond with: [true] - followed by the words that meet the conditions and a brief explanation of why you recognized a word (max. 1 sentence). " +
@@ -50,17 +52,29 @@ public class BadWordScanner {
                     "Exceptions that should be [false]:" +
                     sensitivity.getExceptions();
 
-            String saveSystempromt = makeSafeForJson(systemprompt);
+            String safeSystemPrompt = makeSafeForJson(systemprompt);
+
+            String[][] example;
+
+            switch (language) {
+                case DE -> example = sensitivity.getExampleDE();
+                default -> example = sensitivity.getExampleEN();
+            }
 
             String jsonBody = "{\n" +
                     "  \"model\": \"" + aiModel + "\",\n" +
                     "  \"messages\": [\n" +
-                    "    {\"role\": \"system\", \"content\": \"" + saveSystempromt + "\"},\n" +
+                    "    {\"role\": \"system\", \"content\": \"" + safeSystemPrompt + "\"},\n" +
 
-                    makeContextForJson(sensitivity.getExample())  +
+                    //Adds Examples as Context for the AI
+                    makeContextForJson(example)  +
 
-                    "    {\"role\": \"user\", \"content\": \"Analyze this text: " + safeMessage + "\"}\n" +
+
+                    //Adds new message for the AI to Check
+                    "    {\"role\": \"user\", \"content\": \"" + safeMessage + "\"}\n" +
                     "  ],\n" +
+
+                    //Gives AI the Parameters
                     "  \"temperature\": " + temperature + ",\n" +
                     "  \"top_p\": " + top_p + ",\n" +
                     "  \"max_tokens\": " + max_tokens + ",\n" +
@@ -85,6 +99,7 @@ public class BadWordScanner {
         String stripedResponse = response.strip();
         String lowerResponse = stripedResponse.toLowerCase();
 
+        //Creates a Response Objekt, based on The AIs response (true and false is switched
         if (lowerResponse.contains("[false]") || lowerResponse.contains("false")) {
             return new Response(true, "");
         } else if (lowerResponse.contains("[true]") || lowerResponse.contains("true")) {

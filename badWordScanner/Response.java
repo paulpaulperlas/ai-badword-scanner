@@ -1,8 +1,8 @@
 package badWordScanner;
 
 public class Response {
-    private boolean isSafe;
-    private String message;
+    private boolean isSafe; //true = the messag is safe | false = The message isn't safe
+    private String message; //if the message isn't safe, the AI Adds a Reason
 
     public Response(boolean isSafe, String message) {
         this.isSafe = isSafe;
