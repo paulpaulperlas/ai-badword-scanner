@@ -23,12 +23,12 @@ public class Main {
             if (input.equals("exit")) break;
 
             //Gives you a Response Objekt
-            Response output = badWordScanner.Check(input);
+            Response output = badWordScanner.check(input);
 
-            if (output.isSave) {
+            if (output.isSafe()) {
                 System.out.println("-Text ist gut-");
-            } else if (!output.isSave) {
-                System.out.println(output.message);
+            } else if (!output.isSafe()) {
+                System.out.println(output.getMessage());
             }
         }
         scanner.close();

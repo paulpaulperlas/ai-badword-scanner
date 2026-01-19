@@ -23,17 +23,17 @@ public class BadWordScanner {
         this.aiModel = ai_model;
     }
 
-    public Response Check(String text) {
+    public Response check(String text) {
         if (sensitivity == Sensitivity.NOFILTER) {
             return new Response(true, "");
         } else {
-            String response = Checkmessage(text);
-            return CreateChecked(response);
+            String response = checkmessage(text);
+            return createChecked(response);
         }
     }
 
 
-    public String Checkmessage(String text) {
+    public String checkmessage(String text) {
         try {
             String safeMessage = makeSafeForJson(text);
 
@@ -73,16 +73,16 @@ public class BadWordScanner {
             if (response.statusCode() == 200) {
                 return extractTextFromJSON(response.body());
             } else {
-                return "[Error] Server response with Code: " + response.statusCode();
+                return "[error] Server response with Code: " + response.statusCode();
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "[Error] connection problem";
+            return "[error] connection problem";
         }
     }
 
-    private Response CreateChecked(String response) {
+    private Response createChecked(String response) {
         String stripedResponse = response.strip();
         String lowerResponse = stripedResponse.toLowerCase();
 
@@ -90,19 +90,17 @@ public class BadWordScanner {
             return new Response(true, "");
         } else if (lowerResponse.contains("[true]") || lowerResponse.contains("true")) {
             return new Response(false, response.replace("[true]", ""));
-        } else if (lowerResponse.startsWith("[Error]")) {
-            System.out.println("There is an Issue" + response);
-            return new Response(false, "");
-        } else {
-            System.out.println("AI has Problem: " + response);
+        } else if (lowerResponse.startsWith("[error]")) {
             return new Response(false, response);
+        } else {
+            return new Response(false, "[error] [AI Problem:] " + response);
         }
     }
 
-    public Sensitivity getSensetivity() {
+    public Sensitivity getSensitivity() {
         return sensitivity;
     }
-    public void setSensetivity(Sensitivity sensetivity) {
+    public void setSensitivity(Sensitivity sensetivity) {
         this.sensitivity = sensetivity;
     }
     public String getApiUrl() {

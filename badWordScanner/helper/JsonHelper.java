@@ -1,56 +1,34 @@
 package badWordScanner.helper;
 
 import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JsonHelper {
+    private static final Pattern CONTENT_PATTERN = Pattern.compile("\"content\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\"");
+
     public static String extractTextFromJSON(String jsonResponse) {
-        // 1. Suche nach dem Schlüssel "content"
-        int keyIndex = jsonResponse.indexOf("\"content\"");
-
-        if (keyIndex != -1) {
-            // 2. Ab hier suchen wir den Doppelpunkt
-            int colonIndex = jsonResponse.indexOf(":", keyIndex);
-
-            // 3. Ab dem Doppelpunkt suchen wir das erste Gänsefüßchen (Start des Textes)
-            int valueStartIndex = jsonResponse.indexOf("\"", colonIndex);
-
-            if (colonIndex != -1 && valueStartIndex != -1) {
-                // Der eigentliche Text beginnt NACH dem Gänsefüßchen
-                int startIndex = valueStartIndex + 1;
-
-                // 4. Wir suchen das Ende (deine Logik war hier super, ich habe sie übernommen!)
-                int endIndex = -1;
-                boolean isEscaped = false;
-
-                for (int i = startIndex; i < jsonResponse.length(); i++) {
-                    char c = jsonResponse.charAt(i);
-
-                    if (c == '\\') {
-                        // Das nächste Zeichen ist escaped
-                        isEscaped = !isEscaped;
-                    } else if (c == '"' && !isEscaped) {
-                        // Wir haben das ENDE-Gänsefüßchen gefunden
-                        endIndex = i;
-                        break;
-                    } else {
-                        isEscaped = false;
-                    }
-                }
-
-                if (endIndex != -1) {
-                    String result = jsonResponse.substring(startIndex, endIndex);
-
-                    return cleanUpAnswer(result);
-                }
-            }
+        if (jsonResponse == null || jsonResponse.isEmpty()) {
+            return "[error] Leere Antwort erhalten";
         }
-        System.out.println("DEBUG - Konnte nicht parsen. JSON war: " + jsonResponse);
-        return "[Error] Konnte Antwort nicht lesen.";
+
+        Matcher matcher = CONTENT_PATTERN.matcher(jsonResponse);
+
+        String foundContent = null;
+        while (matcher.find()) {
+            foundContent = matcher.group(1);
+        }
+
+        if (foundContent != null) {
+            return cleanUpAnswer(foundContent);
+        }
+
+        return "[error] Konnte Antwort nicht verstehen, DEBUG - Konnte JSON nicht lesen: + jsonResponse";
     }
 
     private static String cleanUpAnswer(String jsonResponse) {
         return jsonResponse
-                .replace("\\n", "  ")
+                .replace("\\n", "\n")
                 .replace("\\\"", "\"")
                 .replace("\\u00e4", "ä")
                 .replace("\\u00c4", "Ä")
