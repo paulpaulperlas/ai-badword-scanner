@@ -279,4 +279,3 @@ public enum Sensitivity {
         return exampleEN;
     }
 }
-
