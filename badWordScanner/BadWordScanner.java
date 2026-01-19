@@ -3,6 +3,7 @@ package badWordScanner;
 import badWordScanner.helper.HttpHelper;
 
 import java.net.http.HttpResponse;
+import java.util.*;
 
 import static badWordScanner.helper.JsonHelper.*;
 
@@ -11,6 +12,17 @@ public class BadWordScanner {
     private Language language; //There are German (DE) and Englisch (EN)
     private String apiUrl;
     private String aiModel;
+
+    private final int MAX_CACHE_SIZE = 10000;
+    private final int MAX_CACHED_WORD_LENGTH = 50;
+    private Map<String, Response> cache = Collections.synchronizedMap( //Cach so more often used words are faster and don't need AI
+            new LinkedHashMap<String, Response>(1000, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, Response> eldest) {
+                    return size() > MAX_CACHE_SIZE;
+                }
+            }
+    );
 
     private double temperature = 0.01;
     private double top_p = 0.1;
@@ -26,12 +38,18 @@ public class BadWordScanner {
     }
 
     public Response check(String text) {
+        Response response;
+        String cachKey = text.strip().toLowerCase();
+
         if (sensitivity == Sensitivity.NOFILTER) { //NOFILTER skips AI
             return new Response(true, "");
+        } else if (cache.containsKey(cachKey)) {
+            response = cache.get(cachKey);
         } else {
-            String response = checkMessage(text);
-            return createChecked(response);
+            response = createChecked(checkMessage(text));
         }
+        manageCache(cachKey, response);
+        return response;
     }
 
 
@@ -111,11 +129,26 @@ public class BadWordScanner {
         }
     }
 
+    private void manageCache(String message, Response response) {
+        if (cache.size() <= MAX_CACHED_WORD_LENGTH && !response.getMessage().contains("[error]")) {
+            String cleanMessage = message.strip();
+
+            cache.put(cleanMessage.toLowerCase(), response);
+        }
+    }
+
+    public void clearCach() {
+        cache.clear();
+    }
+
+
     public Sensitivity getSensitivity() {
+
         return sensitivity;
     }
-    public void setSensitivity(Sensitivity sensetivity) {
-        this.sensitivity = sensetivity;
+    public void setSensitivity(Sensitivity sensitivity) {
+        this.sensitivity = sensitivity;
+        cache.clear();
     }
     public String getApiUrl() {
         return apiUrl;
@@ -137,23 +170,27 @@ public class BadWordScanner {
     }
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+        cache.clear();
     }
     public double getTop_p() {
         return top_p;
     }
     public void setTop_p(double top_p) {
         this.top_p = top_p;
+        cache.clear();
     }
     public int getMax_tokens() {
         return max_tokens;
     }
     public void setMax_tokens(int max_tokens) {
         this.max_tokens = max_tokens;
+        cache.clear();
     }
     public String getUser() {
         return user;
     }
     public void setUser(String user) {
         this.user = user;
+        cache.clear();
     }
 }
