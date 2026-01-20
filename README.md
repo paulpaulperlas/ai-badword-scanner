@@ -10,8 +10,8 @@ A lightweight Java library that validates **German or English text** using an ex
 * **Structured Result:** Returns a simple object containing a status (`isSafe`) and a specific reason.
 * **BYO-API:** Designed to work with your own API Key (Privacy & Control).
 * **Native Java:** Easy to drop into any Java project.
-* **Smart Caching System:** Integrated, memory-efficient cache that responds to repeated requests immediately without calling the AI. This saves API costs and reduces latency.
-* **Intelligentes Ressourcen-Management:** Only stores relevant short texts (less than 50 characters) and automatically deletes the longest unused entries (LRU) to keep RAM            consumption to a minimum.
+* **Smart Caching System(Optional):** Integrated, memory-efficient cache that responds to repeated requests immediately without calling the AI. This saves API costs and reduces latency.
+* **Intelligentes Ressourcen-Management:** Only stores relevant short texts (less than X characters) and automatically deletes the longest unused entries (LRU) to keep RAM consumption to a minimum.
 
 ## Installation
 
@@ -87,13 +87,14 @@ public class Main {
         //There are a few Languages: German: DE, English: EN
         //You Have to use your own API
         //Is an Example for LM Studio, using the qwen2.5-3b-instruct model (3B is probably a little weak, but enough)
-        BadWordScanner badWordScanner = new BadWordScanner(Sensitivity.ZERO_TOLERANCE, Language.EN, "http://localhost:1234/v1/chat/completions", "qwen2.5-3b-instruct");
+        //If you don't specify a max cache size and max cached word length it automatically deactivates caching
+        BadWordScanner badWordScanner = new BadWordScanner(Sensitivity.ZERO_TOLERANCE, Language.EN, "http://localhost:1234/v1/chat/completions", "qwen2.5-3b-instruct", 10000, 25);
 
         while (true) {
             input = scanner.nextLine();
             if (input.equals("exit")) break;
 
-            //Gives you a Response Objekt 
+            //Gives you a Response Objekt
             Response output = badWordScanner.check(input);
 
             //isSave()  function tells you whether the text contains any bad words

@@ -12,13 +12,14 @@ public class BadWordScanner {
     private String apiUrl;
     private String aiModel;
 
-    private final int MAX_CACHE_SIZE = 10000;
-    private final int MAX_CACHED_WORD_LENGTH = 50;
+    private boolean useCache;
+    private int maxCacheSize; //Recommend 10000
+    private int maxCachedWordLength;//Recommend 25 - 50
     private Map<String, Response> cache = Collections.synchronizedMap( //Cache so more often used words are faster and don't need AI
             new LinkedHashMap<String, Response>(1000, 0.75f, true) {
                 @Override
                 protected boolean removeEldestEntry(Map.Entry<String, Response> eldest) {
-                    return size() > MAX_CACHE_SIZE;
+                    return size() > maxCacheSize;
                 }
             }
     );
@@ -28,12 +29,24 @@ public class BadWordScanner {
     private int max_tokens = 30;
     private String user = "BadWordScanner";
 
-
+    // Automatically deactivates cache
     public BadWordScanner(Sensitivity sensitivity, Language language, String api_url, String ai_model) {
         this.sensitivity = sensitivity;
         this.language = language;
         this.apiUrl = api_url;
         this.aiModel = ai_model;
+        useCache = false;
+    }
+
+    // Automatically activates cache
+    public BadWordScanner(Sensitivity sensitivity, Language language, String api_url, String ai_model, int maxCacheSize, int maxCachedWordLength) {
+        this.sensitivity = sensitivity;
+        this.language = language;
+        this.apiUrl = api_url;
+        this.aiModel = ai_model;
+        useCache = true;
+        this.maxCacheSize = maxCacheSize;
+        this.maxCachedWordLength = maxCachedWordLength;
     }
 
     public Response check(String text) {
@@ -42,12 +55,12 @@ public class BadWordScanner {
 
         if (sensitivity == Sensitivity.NOFILTER) { //NOFILTER skips AI
             return new Response(true, "");
-        } else if (cache.containsKey(cachKey)) {
+        } else if (useCache && cache.containsKey(cachKey)) {
             response = cache.get(cachKey);
         } else {
             response = createChecked(checkMessage(text));
         }
-        manageCache(cachKey, response);
+        if (useCache) manageCache(cachKey, response);
         return response;
     }
 
@@ -129,7 +142,7 @@ public class BadWordScanner {
     }
 
     private void manageCache(String message, Response response) {
-        if (cache.size() <= MAX_CACHED_WORD_LENGTH && !response.getMessage().contains("[error]")) {
+        if (cache.size() <= maxCachedWordLength && !response.getMessage().contains("[error]")) {
             String cleanMessage = message.strip();
 
             cache.put(cleanMessage.toLowerCase(), response);
@@ -137,17 +150,17 @@ public class BadWordScanner {
     }
 
     public void clearCach() {
-        cache.clear();
+        if (useCache) cache.clear();
     }
 
 
-    public Sensitivity getSensitivity() {
 
+    public Sensitivity getSensitivity() {
         return sensitivity;
     }
     public void setSensitivity(Sensitivity sensitivity) {
         this.sensitivity = sensitivity;
-        cache.clear();
+        if (useCache) cache.clear();
     }
     public String getApiUrl() {
         return apiUrl;
@@ -162,6 +175,36 @@ public class BadWordScanner {
         this.aiModel = aiModel;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+    public boolean isUseCache() {
+        return useCache;
+    }
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
+    public int getMaxCacheSize() {
+        return maxCacheSize;
+    }
+    public void setMaxCacheSize(int maxCacheSize) {
+        this.maxCacheSize = maxCacheSize;
+    }
+    public int getMaxCachedWordLength() {
+        return maxCachedWordLength;
+    }
+    public void setMaxCachedWordLength(int maxCachedWordLength) {
+        this.maxCachedWordLength = maxCachedWordLength;
+    }
+    public Map<String, Response> getCache() {
+        return cache;
+    }
+    public void setCache(Map<String, Response> cache) {
+        this.cache = cache;
+    }
 
     //You Probably won't need this
     public double getTemperature() {
