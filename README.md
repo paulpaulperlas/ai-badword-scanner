@@ -2,7 +2,7 @@
 
 A lightweight Java library that validates **German or English text** using an external AI API. It detects profanity, toxicity, and inappropriate content by analyzing the context, rather than just matching words against a list.
 
-> DE/EN **Note:** This library is currently optimized for the **German and English language**, but it might work with others two. If you want to try use EN.
+> DE/EN **Note:** This library is currently optimized for the **German and English language**, but it might work with others too. If you want to try, use EN.
 
 ## Features
 
